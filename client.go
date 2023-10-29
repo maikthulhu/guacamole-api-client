@@ -10,6 +10,7 @@ import (
 	"log"
 	"net/http"
 	"net/url"
+	"strings"
 
 	"github.com/techBeck03/guacamole-api-client/types"
 )
@@ -28,6 +29,7 @@ type Config struct {
 	Token                  string
 	DataSource             string
 	Cookies                map[string]string
+	AuthorizationHeader    string
 }
 
 // Client - base client for guacamole interactions
@@ -82,11 +84,19 @@ func (c *Client) Connect() error {
 			return fmt.Errorf("unable to connect using supplied token and dataSource")
 		}
 	} else {
-		resp, err := c.client.PostForm(fmt.Sprintf("%s/%s", c.config.URL, tokenPath),
-			url.Values{
-				"username": {c.config.Username},
-				"password": {c.config.Password},
-			})
+		form := url.Values{
+			"username": {c.config.Username},
+			"password": {c.config.Password},
+		}
+		req, _ := http.NewRequest("POST", fmt.Sprintf("%s/%s", c.config.URL, tokenPath), strings.NewReader(form.Encode()))
+		req.Header.Add("Content-Type", "application/x-www-form-urlencoded")
+
+		if c.config.AuthorizationHeader != "" {
+			req.Header.Add("Authorization", c.config.AuthorizationHeader)
+		}
+
+		resp, err := c.client.Do(req)
+
 		if err != nil {
 			return err
 		}
@@ -144,6 +154,11 @@ func (c *Client) CreateJSONRequest(method string, path string, params interface{
 
 // Call - function for handling http requests
 func (c *Client) Call(request *http.Request, result interface{}) error {
+	// Add HTTP Authorization header
+	if c.config.AuthorizationHeader != "" {
+		request.Header.Set("Authorization", c.config.AuthorizationHeader)
+	}
+
 	// Add authentication token to request Header
 	request.Header.Set("Guacamole-Token", c.token)
 
