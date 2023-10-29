@@ -20,6 +20,7 @@ var (
 		Token:                  os.Getenv("GUACAMOLE_TOKEN"),
 		DataSource:             os.Getenv("GUACAMOLE_DATA_SOURCE"),
 		DisableTLSVerification: true,
+		AuthorizationHeader:    os.Getenv("AUTHORIZATION_HEADER"),
 	}
 	testConnectionGroup = types.GuacConnectionGroup{
 		Name: "Testing Group",
