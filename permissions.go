@@ -3,7 +3,7 @@ package guacamole
 import (
 	"fmt"
 
-	"github.com/techBeck03/guacamole-api-client/types"
+	"github.com/maikthulhu/guacamole-api-client/types"
 )
 
 const (
