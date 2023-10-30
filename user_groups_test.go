@@ -9,7 +9,7 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/techBeck03/guacamole-api-client/types"
+	"github.com/maikthulhu/guacamole-api-client/types"
 )
 
 var (
