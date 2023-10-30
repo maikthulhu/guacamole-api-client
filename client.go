@@ -114,7 +114,18 @@ func (c *Client) Connect() error {
 			return err
 		}
 		c.token = tokenresp.AuthToken
-		c.baseURL = fmt.Sprintf("%s/api/session/data/%s", c.config.URL, tokenresp.DataSource)
+		tokenDataSource := tokenresp.DataSource
+		// Special case
+		if tokenresp.DataSource == "header" {
+			log.Printf("got invalid DataSource '%s' when logging in", tokenresp.DataSource)
+			if len(tokenresp.AvailableDataSources) > 0 {
+				log.Printf("trying first availableDataSource '%s'", tokenresp.AvailableDataSources[0])
+				tokenDataSource = tokenresp.AvailableDataSources[0]
+			} else {
+				return fmt.Errorf("no valid DataSource found for returned token")
+			}
+		}
+		c.baseURL = fmt.Sprintf("%s/api/session/data/%s", c.config.URL, tokenDataSource)
 		if !(c.config.DisableCookies) {
 			c.cookies = resp.Cookies()
 		}
