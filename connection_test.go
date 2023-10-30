@@ -9,7 +9,7 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/techBeck03/guacamole-api-client/types"
+	"github.com/maikthulhu/guacamole-api-client/types"
 )
 
 var (
@@ -25,7 +25,7 @@ var (
 	testConnection = types.GuacConnection{
 		Name:             "Test Connection",
 		Protocol:         "ssh",
-		ParentIdentifier: "1592",
+		ParentIdentifier: "8",
 		Path:             fmt.Sprintf("%s/Test Connection", os.Getenv("GUACAMOLE_CONNECTION_PATH")),
 	}
 )
