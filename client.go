@@ -66,7 +66,10 @@ func (c *Client) Connect() error {
 		c.baseURL = fmt.Sprintf("%s/api/session/data/%s", c.config.URL, c.config.DataSource)
 		req, _ := c.CreateJSONRequest("GET", fmt.Sprintf("%s/schema/userAttributes", c.baseURL), nil)
 
+		// Set token if present
 		c.token = c.config.Token
+
+		// Set cookies if present
 		for k, v := range c.config.Cookies {
 			cookie := &http.Cookie{
 				Name:  k,
@@ -84,13 +87,20 @@ func (c *Client) Connect() error {
 			return fmt.Errorf("unable to connect using supplied token and dataSource")
 		}
 	} else {
-		form := url.Values{
-			"username": {c.config.Username},
-			"password": {c.config.Password},
+		var form url.Values
+		// If an auth header was passed in and dataSource is "header", post empty data
+		if c.config.AuthorizationHeader != "" && c.config.DataSource == "header" {
+			form = url.Values(nil)
+		} else { // Else, prepare username and password as post data
+			form = url.Values{
+				"username": {c.config.Username},
+				"password": {c.config.Password},
+			}
 		}
 		req, _ := http.NewRequest("POST", fmt.Sprintf("%s/%s", c.config.URL, tokenPath), strings.NewReader(form.Encode()))
 		req.Header.Add("Content-Type", "application/x-www-form-urlencoded")
 
+		// Regardless of login method, pass AuthorizationHeader along if present
 		if c.config.AuthorizationHeader != "" {
 			req.Header.Add("Authorization", c.config.AuthorizationHeader)
 		}
@@ -116,8 +126,12 @@ func (c *Client) Connect() error {
 		c.token = tokenresp.AuthToken
 		tokenDataSource := tokenresp.DataSource
 		// Special case
-		if tokenresp.DataSource == "header" {
-			log.Printf("got invalid DataSource '%s' when logging in", tokenresp.DataSource)
+		// header login method isn't a dataSource, so must be backed by one.
+		//   tokenPath endpoint returns a list of availableDataSources
+		//     "availableDataSources": [ "mysql", "mysql-shared" ]
+		//   We explicitly try the first one (this may be bad).
+		if tokenresp.DataSource == "header" && c.config.DataSource == "header" {
+			log.Printf("got DataSource '%s' when logging in", tokenresp.DataSource)
 			if len(tokenresp.AvailableDataSources) > 0 {
 				log.Printf("trying first availableDataSource '%s'", tokenresp.AvailableDataSources[0])
 				tokenDataSource = tokenresp.AvailableDataSources[0]
