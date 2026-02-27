@@ -18,7 +18,7 @@ var (
 		Username:               os.Getenv("GUACAMOLE_USERNAME"),
 		Password:               os.Getenv("GUACAMOLE_PASSWORD"),
 		DisableTLSVerification: true,
-		AuthorizationHeader:    os.Getenv("AUTHORIZATION_HEADER"),
+		AuthorizationHeader:    os.Getenv("GUACAMOLE_AUTHORIZATION_HEADER"),
 	}
 	testUser                = types.GuacUser{Username: "testingUsers"}
 	testUserMemberGroup     = types.GuacUserGroup{Identifier: "Test User Group"}
