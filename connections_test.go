@@ -34,7 +34,7 @@ func TestListConnections(t *testing.T) {
 	if os.Getenv("GUACAMOLE_COOKIES") != "" {
 		connectionsConfig.Cookies = make(map[string]string)
 		for _, e := range strings.Split(os.Getenv("GUACAMOLE_COOKIES"), ",") {
-			cookie_split := strings.Split(e, "=")
+			cookie_split := strings.SplitN(e, "=", 2)
 			connectionsConfig.Cookies[cookie_split[0]] = cookie_split[1]
 		}
 	}
