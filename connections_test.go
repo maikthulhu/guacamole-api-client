@@ -20,13 +20,13 @@ var (
 		Token:                  os.Getenv("GUACAMOLE_TOKEN"),
 		DataSource:             os.Getenv("GUACAMOLE_DATA_SOURCE"),
 		DisableTLSVerification: true,
-		AuthorizationHeader:    os.Getenv("AUTHORIZATION_HEADER"),
+		AuthorizationHeader:    os.Getenv("GUACAMOLE_AUTHORIZATION_HEADER"),
 	}
 	testConnection = types.GuacConnection{
 		Name:             "Test Connection",
 		Protocol:         "ssh",
-		ParentIdentifier: "8",
-		Path:             fmt.Sprintf("%s/Test Connection", os.Getenv("GUACAMOLE_CONNECTION_PATH")),
+		ParentIdentifier: os.Getenv("GUACAMOLE_CONNECTION_GROUP_ID"),                                      //"18",
+		Path:             fmt.Sprintf("%s/Test Connection", os.Getenv("GUACAMOLE_CONNECTION_GROUP_PATH")), //"mygroup" <- create this group manually, put its id above ^
 	}
 )
 
@@ -34,7 +34,7 @@ func TestListConnections(t *testing.T) {
 	if os.Getenv("GUACAMOLE_COOKIES") != "" {
 		connectionsConfig.Cookies = make(map[string]string)
 		for _, e := range strings.Split(os.Getenv("GUACAMOLE_COOKIES"), ",") {
-			cookie_split := strings.Split(e, "=")
+			cookie_split := strings.SplitN(e, "=", 2)
 			connectionsConfig.Cookies[cookie_split[0]] = cookie_split[1]
 		}
 	}

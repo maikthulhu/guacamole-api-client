@@ -18,7 +18,7 @@ var (
 		Username:               os.Getenv("GUACAMOLE_USERNAME"),
 		Password:               os.Getenv("GUACAMOLE_PASSWORD"),
 		DisableTLSVerification: true,
-		AuthorizationHeader:    os.Getenv("AUTHORIZATION_HEADER"),
+		AuthorizationHeader:    os.Getenv("GUACAMOLE_AUTHORIZATION_HEADER"),
 	}
 	testGroup                    = types.GuacUserGroup{Identifier: "(testing) Test Group"}
 	testGroupMemberGroup         = types.GuacUserGroup{Identifier: "(testing) Test Child Group"}
@@ -433,6 +433,7 @@ func TestSetUserGroupPermissions(t *testing.T) {
 	// Add permissions to group
 	permissionItems := []types.GuacPermissionItem{
 		client.NewAddSystemPermission(types.SystemPermissions{}.Administer()),
+		client.NewAddSystemPermission(types.SystemPermissions{}.Audit()),
 		client.NewAddSystemPermission(types.SystemPermissions{}.CreateUser()),
 		client.NewAddSystemPermission(types.SystemPermissions{}.CreateConnection()),
 		client.NewAddSystemPermission(types.SystemPermissions{}.CreateConnectionGroup()),
@@ -466,6 +467,7 @@ func TestSetUserGroupPermissions(t *testing.T) {
 	// Remove permissions
 	permissionItems = []types.GuacPermissionItem{
 		client.NewRemoveSystemPermission(types.SystemPermissions{}.Administer()),
+		client.NewRemoveSystemPermission(types.SystemPermissions{}.Audit()),
 		client.NewRemoveSystemPermission(types.SystemPermissions{}.CreateUser()),
 		client.NewRemoveSystemPermission(types.SystemPermissions{}.CreateConnection()),
 		client.NewRemoveSystemPermission(types.SystemPermissions{}.CreateConnectionGroup()),

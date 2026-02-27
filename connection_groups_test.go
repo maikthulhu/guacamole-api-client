@@ -20,7 +20,7 @@ var (
 		Token:                  os.Getenv("GUACAMOLE_TOKEN"),
 		DataSource:             os.Getenv("GUACAMOLE_DATA_SOURCE"),
 		DisableTLSVerification: true,
-		AuthorizationHeader:    os.Getenv("AUTHORIZATION_HEADER"),
+		AuthorizationHeader:    os.Getenv("GUACAMOLE_AUTHORIZATION_HEADER"),
 	}
 	testConnectionGroup = types.GuacConnectionGroup{
 		Name: "Testing Group",
@@ -32,7 +32,7 @@ func TestListConnectionGroups(t *testing.T) {
 	if os.Getenv("GUACAMOLE_COOKIES") != "" {
 		connectionGroupsConfig.Cookies = make(map[string]string)
 		for _, e := range strings.Split(os.Getenv("GUACAMOLE_COOKIES"), ",") {
-			cookie_split := strings.Split(e, "=")
+			cookie_split := strings.SplitN(e, "=", 2)
 			connectionGroupsConfig.Cookies[cookie_split[0]] = cookie_split[1]
 		}
 	}
@@ -57,9 +57,9 @@ func TestCreateConnectionGroup(t *testing.T) {
 		t.Errorf("Error %s connecting to guacamole with config %+v", err, connectionGroupsConfig)
 	}
 
-	grp, err := client.ReadConnectionGroupByPath(os.Getenv("GUACAMOLE_CONNECTION_PATH"))
+	grp, err := client.ReadConnectionGroupByPath(os.Getenv("GUACAMOLE_CONNECTION_GROUP_PATH"))
 	if err != nil {
-		t.Errorf("Error unable to find parent group with path: %s", os.Getenv("GUACAMOLE_CONNECTION_PATH"))
+		t.Errorf("Error unable to find parent group with path: %s", os.Getenv("GUACAMOLE_CONNECTION_GROUP_PATH"))
 	}
 
 	testConnectionGroup.ParentIdentifier = grp.Identifier

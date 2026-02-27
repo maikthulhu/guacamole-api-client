@@ -64,7 +64,7 @@ func main() {
 	}
 
 	// Read connection by Path
-	readConnection, err = client.ReadConnectionByPath("ROOT/Testing Connection")
+	readConnection, err = client.ReadConnectionByPath("Testing Connection")
 
 	if err != nil {
 		log.Fatal(err)

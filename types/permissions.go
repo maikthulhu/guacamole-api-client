@@ -27,6 +27,11 @@ func (SystemPermissions) Administer() string {
 	return "ADMINISTER"
 }
 
+// Audit constant value option
+func (SystemPermissions) Audit() string {
+	return "AUDIT"
+}
+
 // CreateUser constant value option
 func (SystemPermissions) CreateUser() string {
 	return "CREATE_USER"
@@ -56,6 +61,7 @@ func (SystemPermissions) CreateSharingProfile() string {
 func (SystemPermissions) ValidChoices() []string {
 	return []string{
 		"ADMINISTER",
+		"AUDIT",
 		"CREATE_USER",
 		"CREATE_USER_GROUP",
 		"CREATE_CONNECTION",
