@@ -63,6 +63,7 @@ func main() {
 	// Add user system permissions
 	permissionItems := []types.GuacPermissionItem{
 		client.NewAddSystemPermission(types.SystemPermissions{}.Administer()),
+		client.NewAddSystemPermission(types.SystemPermissions{}.Audit()),
 		client.NewAddSystemPermission(types.SystemPermissions{}.CreateUser()),
 		client.NewAddSystemPermission(types.SystemPermissions{}.CreateConnection()),
 		client.NewAddSystemPermission(types.SystemPermissions{}.CreateConnectionGroup()),

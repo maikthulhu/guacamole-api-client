@@ -355,6 +355,7 @@ func TestSetUserPermissions(t *testing.T) {
 	// Add permissions to user
 	permissionItems := []types.GuacPermissionItem{
 		client.NewAddSystemPermission(types.SystemPermissions{}.Administer()),
+		client.NewAddSystemPermission(types.SystemPermissions{}.Audit()),
 		client.NewAddSystemPermission(types.SystemPermissions{}.CreateUser()),
 		client.NewAddSystemPermission(types.SystemPermissions{}.CreateConnection()),
 		client.NewAddSystemPermission(types.SystemPermissions{}.CreateConnectionGroup()),
@@ -388,6 +389,7 @@ func TestSetUserPermissions(t *testing.T) {
 	// Remove permissions
 	permissionItems = []types.GuacPermissionItem{
 		client.NewRemoveSystemPermission(types.SystemPermissions{}.Administer()),
+		client.NewRemoveSystemPermission(types.SystemPermissions{}.Audit()),
 		client.NewRemoveSystemPermission(types.SystemPermissions{}.CreateUser()),
 		client.NewRemoveSystemPermission(types.SystemPermissions{}.CreateConnection()),
 		client.NewRemoveSystemPermission(types.SystemPermissions{}.CreateConnectionGroup()),

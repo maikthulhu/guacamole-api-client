@@ -15,6 +15,7 @@ const (
 
 var validSystemPermissions = types.StrSlice{
 	"ADMINISTER",
+	"AUDIT",
 	"CREATE_USER",
 	"CREATE_CONNECTION",
 	"CREATE_CONNECTION_GROUP",
